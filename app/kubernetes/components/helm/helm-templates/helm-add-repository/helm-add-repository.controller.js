@@ -1,11 +1,10 @@
 export default class HelmAddRepositoryController {
   /* @ngInject */
-  constructor($state, $async, HelmService, Notifications, EndpointProvider) {
+  constructor($state, $async, HelmService, Notifications) {
     this.$state = $state;
     this.$async = $async;
     this.HelmService = HelmService;
     this.Notifications = Notifications;
-    this.EndpointProvider = EndpointProvider;
   }
 
   doesRepoExist() {

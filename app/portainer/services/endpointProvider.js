@@ -1,5 +1,3 @@
-import _ from 'lodash-es';
-
 /* 
 initialize
 
@@ -10,9 +8,6 @@ endpointID,
 setEndpointID
 
 
-setOfflineModeFromStatus
-setOfflineMode
-offlineMode
 
 
 
@@ -20,52 +15,29 @@ clean
 
 */
 
-angular.module('portainer.app').factory(
-  'EndpointProvider',
-  /* @ngInject */
-  function EndpointProviderFactory(LocalStorage) {
-    'use strict';
-    var service = {};
-    var endpoint = {};
+angular.module('portainer.app').factory('EndpointProvider', EndpointProvider);
 
-    service.initialize = function () {
-      var endpointID = LocalStorage.getEndpointID();
+/* @ngInject */
+function EndpointProvider() {
+  const state = {
+    currentEndpoint: null,
+  };
 
-      if (endpointID) {
-        endpoint.ID = endpointID;
-      }
-    };
+  return { endpointID, setCurrentEndpoint, currentEndpoint, clean };
 
-    service.clean = function () {
-      LocalStorage.cleanEndpointData();
-      endpoint = {};
-    };
-
-    service.endpoint = function () {
-      return endpoint;
-    };
-
-    service.endpointID = function () {
-      if (endpoint.ID === undefined) {
-        endpoint.ID = LocalStorage.getEndpointID();
-      }
-
-      return endpoint.ID;
-    };
-
-    service.setEndpointID = function (id) {
-      endpoint.ID = id;
-      LocalStorage.storeEndpointID(id);
-    };
-
-    service.currentEndpoint = function () {
-      var endpointId = endpoint.ID;
-      var endpoints = LocalStorage.getEndpoints();
-      return _.find(endpoints, function (item) {
-        return item.Id === endpointId;
-      });
-    };
-
-    return service;
+  function endpointID() {
+    return state.currentEndpoint && state.currentEndpoint.Id;
   }
-);
+
+  function setCurrentEndpoint(endpoint) {
+    state.currentEndpoint = endpoint;
+  }
+
+  function currentEndpoint() {
+    return state.currentEndpoint;
+  }
+
+  function clean() {
+    state.currentEndpoint = null;
+  }
+}

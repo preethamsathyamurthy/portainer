@@ -3,8 +3,6 @@ import { PortainerEndpointTypes } from 'Portainer/models/endpoint/models';
 
 /* @ngInject */
 export function onStartupAngular($rootScope, $state, $interval, LocalStorage, EndpointProvider, SystemService, cfpLoadingBar, $transitions, HttpRequestHelper) {
-  EndpointProvider.initialize();
-
   $rootScope.$state = $state;
   $rootScope.defaultTitle = document.title;
 
@@ -38,7 +36,7 @@ export function onStartupAngular($rootScope, $state, $interval, LocalStorage, En
 
 function ping(EndpointProvider, SystemService) {
   const endpoint = EndpointProvider.currentEndpoint();
-  if (endpoint !== undefined && endpoint.Type == PortainerEndpointTypes.EdgeAgentOnDockerEnvironment) {
+  if (endpoint && endpoint.Type == PortainerEndpointTypes.EdgeAgentOnDockerEnvironment) {
     SystemService.ping(endpoint.Id);
   }
 }

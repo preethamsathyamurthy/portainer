@@ -3,7 +3,7 @@ import angular from 'angular';
 angular.module('portainer.kubernetes').factory('KubernetesConfig', KubernetesConfigFactory);
 
 /* @ngInject */
-function KubernetesConfigFactory($http, EndpointProvider, API_ENDPOINT_KUBERNETES) {
+function KubernetesConfigFactory($http, API_ENDPOINT_KUBERNETES) {
   return { get };
 
   async function get(environmentIDs) {
