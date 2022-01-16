@@ -14,8 +14,6 @@ setOfflineModeFromStatus
 setOfflineMode
 offlineMode
 
-endpoints
-setEndpoints
 
 
 clean
@@ -58,14 +56,6 @@ angular.module('portainer.app').factory(
     service.setEndpointID = function (id) {
       endpoint.ID = id;
       LocalStorage.storeEndpointID(id);
-    };
-
-    service.endpoints = function () {
-      return LocalStorage.getEndpoints();
-    };
-
-    service.setEndpoints = function (data) {
-      LocalStorage.storeEndpoints(data);
     };
 
     service.currentEndpoint = function () {
