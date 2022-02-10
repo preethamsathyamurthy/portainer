@@ -1,35 +1,10 @@
-import { createContext, useContext, useMemo, PropsWithChildren } from 'react';
+import { createRowContext } from '@/portainer/components/datatables/RowContext';
 
 interface RowContextState {
   disableTrustOnFirstConnect: boolean;
   isOpenAmtEnabled: boolean;
 }
 
-const RowContext = createContext<RowContextState | null>(null);
+const { RowProvider, useRowContext } = createRowContext<RowContextState>();
 
-export interface RowProviderProps {
-  disableTrustOnFirstConnect: boolean;
-  isOpenAmtEnabled: boolean;
-}
-
-export function RowProvider({
-  disableTrustOnFirstConnect,
-  isOpenAmtEnabled,
-  children,
-}: PropsWithChildren<RowProviderProps>) {
-  const state = useMemo(
-    () => ({ disableTrustOnFirstConnect, isOpenAmtEnabled }),
-    [disableTrustOnFirstConnect, isOpenAmtEnabled]
-  );
-
-  return <RowContext.Provider value={state}>{children}</RowContext.Provider>;
-}
-
-export function useRowContext() {
-  const context = useContext(RowContext);
-  if (!context) {
-    throw new Error('should be nested under RowProvider');
-  }
-
-  return context;
-}
+export { RowProvider, useRowContext };
