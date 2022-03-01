@@ -241,8 +241,7 @@ class KubernetesApplicationService {
           const startPoint = formValues.OriginalIngresses[0].Paths.length;
           if (count === 0) {
             currentIngress = ingresses;
-          }
-          if (count !== 0) {
+          } else {
             currentIngress[0].Paths.push(ingresses[0].Paths[startPoint]);
           }
           count = count + 1;
