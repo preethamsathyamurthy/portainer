@@ -118,6 +118,25 @@ export class KubernetesIngressConverter {
     return ingresses;
   }
 
+  static editingFormvaluesToMultipleIngresses(formValues, services) {
+    const originalIngress = angular.copy(formValues.OriginalIngresses);
+    let count = 0;
+    let currentIngresses = [];
+    services.forEach(async (service) => {
+      if (service.Ingress) {
+        const ingress = this.newApplicationFormValuesToIngresses(formValues, service.Name, service.Ports);
+        const startPoint = originalIngress[0].Paths.length;
+        if (count === 0) {
+          currentIngresses = ingress;
+        } else {
+          currentIngresses[0].Paths.push(ingress[0].Paths[startPoint]);
+        }
+        count = count + 1;
+      }
+    });
+    return currentIngresses;
+  }
+
   static editingFormValuesToIngresses(formValues, serviceName, servicePorts) {
     const ingresses = angular.copy(formValues.OriginalIngresses);
     servicePorts.forEach((port) => {
