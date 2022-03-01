@@ -224,13 +224,23 @@ class KubernetesApplicationService {
     let [app, headlessService, services, service, claims] = KubernetesApplicationConverter.applicationFormValuesToApplication(formValues);
 
     if (services) {
+      let count = 0;
+      let currentIngress = [];
       services.forEach(async (service) => {
         this.KubernetesServiceService.create(service);
         if (service.Ingress) {
           const ingresses = KubernetesIngressConverter.newApplicationFormValuesToIngresses(formValues, service.Name, service.Ports);
-          await Promise.all(this._generateIngressPatchPromises(formValues.OriginalIngresses, ingresses));
+          const startPoint = formValues.OriginalIngresses[0].Paths.length;
+          if (count === 0) {
+            currentIngress = ingresses;
+          }
+          if (count !== 0) {
+            currentIngress[0].Paths.push(ingresses[0].Paths[startPoint]);
+          }
+          count = count + 1;
         }
       });
+      await Promise.all(this._generateIngressPatchPromises(formValues.OriginalIngresses, currentIngress));
     }
 
     if (service) {
