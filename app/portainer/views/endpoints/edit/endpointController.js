@@ -323,7 +323,7 @@ function EndpointController(
     $scope.endpoint.ManagementInfo['DNS Suffix'] = '-';
   }
 
-  function buildEnvironmentSubCommand() {
+  function buildDockerEnvironmentSubCommand() {
     if ($scope.formValues.EnvVarSource === '') {
       return [];
     }
@@ -338,7 +338,7 @@ function EndpointController(
   }
 
   function buildLinuxStandaloneCommand(agentVersion, edgeId, edgeKey, allowSelfSignedCerts) {
-    const env = buildEnvironmentSubCommand();
+    const env = buildDockerEnvironmentSubCommand();
 
     return [
       'docker run -d \\',
@@ -359,7 +359,7 @@ function EndpointController(
   }
 
   function buildWindowsStandaloneCommand(agentVersion, edgeId, edgeKey, allowSelfSignedCerts) {
-    const env = buildEnvironmentSubCommand();
+    const env = buildDockerEnvironmentSubCommand();
 
     return [
       'docker run -d \\',
@@ -379,7 +379,7 @@ function EndpointController(
   }
 
   function buildLinuxSwarmCommand(agentVersion, edgeId, edgeKey, allowSelfSignedCerts) {
-    const env = buildEnvironmentSubCommand();
+    const env = buildDockerEnvironmentSubCommand();
 
     return [
       'docker network create \\',
@@ -408,7 +408,7 @@ function EndpointController(
   }
 
   function buildWindowsSwarmCommand(agentVersion, edgeId, edgeKey, allowSelfSignedCerts) {
-    const env = buildEnvironmentSubCommand();
+    const env = buildDockerEnvironmentSubCommand();
 
     return [
       'docker network create \\',
@@ -436,7 +436,11 @@ function EndpointController(
   }
 
   function buildKubernetesCommand(agentVersion, edgeId, edgeKey, allowSelfSignedCerts) {
-    return `curl https://downloads.portainer.io/portainer-ce${agentVersion}-edge-agent-setup.sh | bash -s -- ${edgeId} ${edgeKey} ${allowSelfSignedCerts ? '1' : '0'}`;
+    const envVars = $scope.formValues.EnvVarSource || '';
+    const url = 'https://raw.githubusercontent.com/portainer/k8s/feat/EE-2436/source-env-vars/deploy/manifests/agent/portainer-ce212-edge-agent-setup.sh';
+    //'https://downloads.portainer.io/portainer-ce${agentVersion}-edge-agent-setup.sh';
+    return `curl ${url} |
+       bash -s -- ${edgeId} ${edgeKey} ${allowSelfSignedCerts ? '1' : '0'} ${envVars.trim()}`;
   }
 
   initView();
