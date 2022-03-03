@@ -101,6 +101,7 @@ type (
 		AdminPasswordFile         *string
 		Assets                    *string
 		Data                      *string
+		DockerExtension           *bool
 		FeatureFlags              *[]Pair
 		EnableEdgeComputeFeatures *bool
 		EndpointURL               *string
