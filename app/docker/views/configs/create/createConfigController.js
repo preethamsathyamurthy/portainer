@@ -94,11 +94,16 @@ class CreateConfigController {
     config.Data = btoa(unescape(encodeURIComponent(configData)));
   }
 
+  addTemplating(config, template = 'golang') {
+    config.Templating = { Name: template };
+  }
+
   prepareConfiguration() {
     let config = {};
     config.Name = this.formValues.Name;
     this.prepareConfigData(config);
     this.prepareLabelsConfig(config);
+    this.addTemplating(config);
     return config;
   }
 
